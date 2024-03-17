@@ -11,13 +11,13 @@ def object_category():
 def test_category(object_category):
     assert object_category.title == 'револьверы'
     assert object_category.description == 'размер барабана'
-    assert object_category._goods == []
+    assert object_category.goods == []  # Используем геттер goods вместо _goods
 
     product = Product('патроны', 'калибр', 1000.0, 30)
-    object_category.add_products(product)
+    object_category.add_product(product)  # Поправляем вызов метода add_product
 
     assert Category.total_unique_products == 1
-    assert object_category.display_list_products == 'патроны, 1000.0 руб. Остаток: 30 шт.'
+    assert object_category.display_list_products() == 'патроны, 1000.0 руб. Остаток: 30 шт.\n'
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def cleanup_total():
 def test_total():
     category = Category('револьверы', 'размер барабана')
     product = Product('патроны', 'калибр', 1000.0, 30)
-    category.add_products(product)
+    category.add_product(product)  # Поправляем вызов метода add_product
 
     assert Category.total_categories == 1
     assert Category.total_unique_products == 1
