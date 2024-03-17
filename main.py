@@ -14,7 +14,7 @@ class Category:
         self.__goods.append(product)
         Category.total_unique_products += 1
 
-    # Геттер для атрибута класса Category «товары»
+    # Геттер для атрибута класса Category товары
     @property
     def goods(self):
         return self.__goods
@@ -25,6 +25,12 @@ class Category:
         for product in self.__goods:
             result += f'{product.title}, {product.price} руб. Остаток: {product.quantity} шт.\n'
         return result
+
+    def __len__(self):
+        return len(self.__goods)
+
+    def __str__(self):
+        return f"{self.title}, количество продуктов: {len(self)} шт."
 
 
 class Product:
@@ -49,3 +55,12 @@ class Product:
     def create(cls, **kwargs):
         new_product = cls(**kwargs)
         return new_product
+
+    def __str__(self):
+        return f"{self.title}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        if isinstance(other, Product):
+            return self.price * self.quantity + other.price * other.quantity
+        else:
+            raise TypeError("Unsupported operand type(s) for +: 'Product' and '{}'".format(type(other)))
