@@ -2,23 +2,28 @@ class Category:
     total_categories = 0
     total_unique_products = 0
 
-    def __init__(self, title, description):
+    def __init__(self, title, description, products=[]):
         self.title = title
         self.description = description
-        self._goods = []  # сделать список товаров приватным атрибутом
+        self.__goods = list(set(products))  # делаем список товаров приватным и уникальным
         Category.total_categories += 1
+        Category.total_unique_products += len(self.__goods)
 
-# метод добавления товаров
-    def add_products(self, product):
-        self._goods.append(product)
+    # метод добавления товаров
+    def add_product(self, product):
+        self.__goods.append(product)
         Category.total_unique_products += 1
 
-# Для атрибута класса Category «товары» добавить геттер
+    # Геттер для атрибута класса Category «товары»
     @property
+    def goods(self):
+        return self.__goods
+
+    # метод для отображения списка товаров
     def display_list_products(self):
         result = ''
-        for product in self._goods:
-            result += f'{product.title}, {product.price} руб. Остаток: {product.quantity} шт.'
+        for product in self.__goods:
+            result += f'{product.title}, {product.price} руб. Остаток: {product.quantity} шт.\n'
         return result
 
 
@@ -41,6 +46,6 @@ class Product:
             print("Цена введена некорректно!")
 
     @classmethod
-    def create_product(cls, title, description, price, quantity):
-        new_product = cls(title, description, price, quantity)
+    def create(cls, **kwargs):
+        new_product = cls(**kwargs)
         return new_product
