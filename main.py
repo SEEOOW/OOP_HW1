@@ -12,8 +12,11 @@ class Category:
         Category.total_unique_products += len(self.__goods)
 
     def add_product(self, product):
-        self.__goods.append(product)
-        Category.total_unique_products += 1
+        if isinstance(product, Product):
+            self.__goods.append(product)
+            Category.total_unique_products += 1
+        else:
+            raise TypeError("Можно добавлять только продукты или их наследников в категорию")
 
     @property
     def goods(self):
@@ -59,10 +62,12 @@ class Product:
         return f"{self.title}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
+        if type(self) != type(other):
+            raise TypeError("Складывать продукты разных классов нельзя")
         if isinstance(other, Product):
             return self.price * self.quantity + other.price * other.quantity
         else:
-            raise TypeError("Unsupported operand type(s) for +: 'Product' and '{}'".format(type(other)))
+            raise TypeError("Error".format(type(other)))
 
 
 class Smartphone(Product):

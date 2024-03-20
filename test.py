@@ -1,7 +1,5 @@
 import pytest
-
-from main import Category, Product
-
+from main import Category, Product, Smartphone
 
 @pytest.fixture
 def object_category():
@@ -30,6 +28,11 @@ def test_product(object_product):
     assert object_product.description == 'калибр'
     assert object_product.price == 1000.0
     assert object_product.quantity == 30
+
+
+def test_add_non_product_object(object_category):
+    with pytest.raises(TypeError):
+        object_category.add_product("Not a product")
 
 
 @pytest.fixture(autouse=True)
