@@ -62,12 +62,12 @@ class Product:
         return f"{self.title}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if type(self) != type(other):
+        if type(self) is not type(other):
             raise TypeError("Складывать продукты разных классов нельзя")
         if isinstance(other, Product):
             return self.price * self.quantity + other.price * other.quantity
         else:
-            raise TypeError("Error".format(type(other)))
+            raise TypeError("Error: неизвестный тип объекта")
 
 
 class Smartphone(Product):
