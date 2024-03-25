@@ -1,3 +1,35 @@
+from abc import ABC, abstractmethod
+
+
+class LogMixin:
+    def __repr__(self):
+        attrs = ', '.join([f"{attr}={value}" for attr, value in self.__dict__.items()])
+        return f"{self.__class__.__name__}({attrs})"
+
+
+class AbstractProduct(ABC):
+    def __init__(self, title, description, price, quantity):
+        self.title = title
+        self.description = description
+        self._price = float(price)
+        self.quantity = int(quantity)
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, new_price):
+        if new_price > 0:
+            self._price = float(new_price)
+        else:
+            print("Цена введена некорректно!")
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
 class Category:
     total_categories = 0
     total_unique_products = 0
@@ -12,7 +44,7 @@ class Category:
         Category.total_unique_products += len(self.__goods)
 
     def add_product(self, product):
-        if isinstance(product, Product):
+        if isinstance(product, AbstractProduct):
             self.__goods.append(product)
             Category.total_unique_products += 1
         else:
@@ -35,42 +67,20 @@ class Category:
         return f"{self.title}, количество продуктов: {len(self)} шт."
 
 
-class Product:
-    def __init__(self, title, description, price, quantity):
-        self.title = title
-        self.description = description
-        self._price = float(price)
-        self.quantity = int(quantity)
-
-    @property
-    def price(self):
-        return self._price
-
-    @price.setter
-    def price(self, new_price):
-        if new_price > 0:
-            self._price = float(new_price)
-        else:
-            print("Цена введена некорректно!")
-
-    @classmethod
-    def create(cls, **kwargs):
-        new_product = cls(**kwargs)
-        return new_product
-
+class Product(AbstractProduct, LogMixin):
     def __str__(self):
         return f"{self.title}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if type(self) != type(other):
+        if type(self) is not type(other):
             raise TypeError("Складывать продукты разных классов нельзя")
-        if isinstance(other, Product):
+        if isinstance(other, AbstractProduct):
             return self.price * self.quantity + other.price * other.quantity
         else:
-            raise TypeError("Error".format(type(other)))
+            raise TypeError("Error: неизвестный тип объекта")
 
 
-class Smartphone(Product):
+class Smartphone(AbstractProduct, LogMixin):
     def __init__(self, title, description, price, quantity, performance, model, memory_capacity, color):
         super().__init__(title, description, price, quantity)
         self.performance = performance
@@ -82,7 +92,7 @@ class Smartphone(Product):
         return f"{super().__str__()}, Производительность: {self.performance}, Модель: {self.model}, Объем памяти: {self.memory_capacity}, Цвет: {self.color}"
 
 
-class LawnGrass(Product):
+class LawnGrass(AbstractProduct, LogMixin):
     def __init__(self, title, description, price, quantity, country_of_origin, germination_period, color):
         super().__init__(title, description, price, quantity)
         self.country_of_origin = country_of_origin
