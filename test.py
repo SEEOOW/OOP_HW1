@@ -1,5 +1,5 @@
 import pytest
-from main import Category, Product, Smartphone
+from main import Category, Product
 
 @pytest.fixture
 def object_category():
