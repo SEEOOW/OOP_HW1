@@ -1,5 +1,6 @@
 import pytest
-from main import Category, Product
+from main import Category, Product, AbstractProduct
+
 
 @pytest.fixture
 def object_category():
