@@ -8,6 +8,7 @@ class LogMixin:
 
 
 class AbstractProduct(ABC):
+    @abstractmethod
     def __init__(self, title, description, price, quantity):
         self.title = title
         self.description = description
@@ -15,15 +16,14 @@ class AbstractProduct(ABC):
         self.quantity = int(quantity)
 
     @property
+    @abstractmethod
     def price(self):
-        return self._price
+        pass
 
     @price.setter
+    @abstractmethod
     def price(self, new_price):
-        if new_price > 0:
-            self._price = float(new_price)
-        else:
-            print("Цена введена некорректно!")
+        pass
 
     @abstractmethod
     def __str__(self):
@@ -68,6 +68,20 @@ class Category:
 
 
 class Product(AbstractProduct, LogMixin):
+    def __init__(self, title, description, price, quantity):
+        super().__init__(title, description, price, quantity)
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, new_price):
+        if new_price > 0:
+            self._price = float(new_price)
+        else:
+            print("Цена введена некорректно!")
+
     def __str__(self):
         return f"{self.title}, {self.price} руб. Остаток: {self.quantity} шт."
 
@@ -88,6 +102,17 @@ class Smartphone(AbstractProduct, LogMixin):
         self.memory_capacity = memory_capacity
         self.color = color
 
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, new_price):
+        if new_price > 0:
+            self._price = float(new_price)
+        else:
+            print("Цена введена некорректно!")
+
     def __str__(self):
         return f"{super().__str__()}, Производительность: {self.performance}, Модель: {self.model}, Объем памяти: {self.memory_capacity}, Цвет: {self.color}"
 
@@ -98,6 +123,17 @@ class LawnGrass(AbstractProduct, LogMixin):
         self.country_of_origin = country_of_origin
         self.germination_period = germination_period
         self.color = color
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, new_price):
+        if new_price > 0:
+            self._price = float(new_price)
+        else:
+            print("Цена введена некорректно!")
 
     def __str__(self):
         return f"{super().__str__()}, Страна-производитель: {self.country_of_origin}, Срок прорастания: {self.germination_period}, Цвет: {self.color}"
